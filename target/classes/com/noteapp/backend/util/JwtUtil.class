@@ -1,0 +1,43 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package com.noteapp.backend.util;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import java.util.Date;
+import javax.crypto.SecretKey;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+@Component
+public class JwtUtil {
+   @Value("${jwt.secret}")
+   private String secret;
+   @Value("${jwt.expiration}")
+   private long expiration;
+
+   public JwtUtil() {
+   }
+
+   private SecretKey getSigningKey() {
+      return Keys.hmacShaKeyFor(this.secret.getBytes());
+   }
+
+   public String generateToken(String username) {
+      return Jwts.builder().setSubject(username).setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + this.expiration)).signWith(this.getSigningKey()).compact();
+   }
+
+   public String getUsernameFromToken(String token) {
+      return ((Claims)Jwts.parserBuilder().setSigningKey(this.getSigningKey()).build().parseClaimsJws(token).getBody()).getSubject();
+   }
+
+   public boolean validateToken(String token) {
+      try {
+         Jwts.parserBuilder().setSigningKey(this.getSigningKey()).build().parseClaimsJws(token);
+         return true;
+      } catch (IllegalArgumentException | JwtException var3) {
+         return false;
+      }
+   }
+}

@@ -1,0 +1,57 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package com.noteapp.backend.service;
+
+import com.noteapp.backend.entity.Note;
+import com.noteapp.backend.entity.User;
+import com.noteapp.backend.repository.NoteRepository;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class NoteService {
+   @Autowired
+   private NoteRepository noteRepository;
+
+   public NoteService() {
+   }
+
+   public Note createNote(Note note) {
+      return (Note)this.noteRepository.save(note);
+   }
+
+   public List<Note> getNotesByOwner(User owner) {
+      return this.noteRepository.findByOwner(owner);
+   }
+
+   public List<Note> getSharedNotes(User user) {
+      return this.noteRepository.findBySharedWith(user);
+   }
+
+   public List<Note> getPublicNotes() {
+      return this.noteRepository.findByIsPublicTrue();
+   }
+
+   public Optional<Note> getNoteById(Long id) {
+      return this.noteRepository.findById(id);
+   }
+
+   public Note updateNote(Note note) {
+      return (Note)this.noteRepository.save(note);
+   }
+
+   public void deleteNote(Long id) {
+      this.noteRepository.deleteById(id);
+   }
+
+   public void shareNote(Note note, User user) {
+      note.getSharedWith().add(user);
+      this.noteRepository.save(note);
+   }
+
+   public void unshareNote(Note note, User user) {
+      note.getSharedWith().remove(user);
+      this.noteRepository.save(note);
+   }
+}
