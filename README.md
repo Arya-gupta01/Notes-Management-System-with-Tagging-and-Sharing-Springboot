@@ -35,9 +35,9 @@ Whether you're studying, working in a team, or managing personal ideas — this 
 - Instant results
 
 ### 🤝 Sharing & Collaboration
-- Share notes with users or groups
-- Real-time collaborative editing
-- Commenting and suggestions
+- Share notes with users or groups.
+- Real-time collaborative editing.
+- Commenting and suggestions.
 
 ### 🕒 Version History
 - Track all changes
